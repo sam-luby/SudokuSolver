@@ -12,15 +12,18 @@ lines_fmtd = ['|'.join([line[i:i+3] for i in range(0, len(line), 3)]) for line i
 board = np.array([list(line) for line in lines])
 
 # print("Range of columns", board[:, 1:3])
-[print("row", x, board[x]) for x, row in enumerate(board, 0)]
-[print("col", x, board[:, x]) for x, col in enumerate(board, 0)]
+rows = [board[x] for x, row in enumerate(board, 0)]
+cols = [board[:, x] for x, col in enumerate(board, 0)]
 
 
+# Check what numbers arent in each row:
+for x, row in enumerate(rows, 0):
+	for num in RANGE:
+		if num not in [int(x) for x in row if x.isdigit()]:
+			print("{0} not in row {1}".format(num, x))
 
-row1 = board[0]
-
-row1_ints = [int(x) for x in row1 if x.isdigit()]
-
-for num in RANGE:
-	if num not in row1_ints:
-		print(num, "not in row")
+# Check what numbers arent in each column:
+for x, col in enumerate(cols, 0):
+	for num in RANGE:
+		if num not in [int(x) for x in col if x.isdigit()]:
+			print("{0} not in col {1}".format(num, x))
