@@ -16,19 +16,6 @@ rows = [board[x] for x, row in enumerate(board, 0)]
 cols = [board[:, x] for x, col in enumerate(board, 0)]
 
 
-# Check what numbers arent in each row:
-for x, row in enumerate(rows, 0):
-	for num in RANGE:
-		if num not in [int(x) for x in row if x.isdigit()]:
-			print("{0} not in row {1}".format(num, x))
-
-# Check what numbers arent in each column:
-for x, col in enumerate(cols, 0):
-	for num in RANGE:
-		if num not in [int(x) for x in col if x.isdigit()]:
-			print("{0} not in col {1}".format(num, x))
-
-
 # Gets the 3x3 block on the sudoku board
 #   1[0:2][0:2] | 2[0:2][3:5] | 3[0:2][6:8]
 #	4[3:5][0:2] | 5[3:5][3:5] | 6[3:5][6:8]
@@ -56,17 +43,16 @@ def get_block_region(row_index, column_index):
 		elif column_index <= 8:
 			return 9
 
+def get_missing_numbers(row_or_index):
+	missing_numbers = []
+	for num in RANGE:
+		if num not in [int(x) for x in row_or_index if x.isdigit()]:
+			missing_numbers.append(num)
+	return missing_numbers
 
-print(get_block_region(0,0))
-print(get_block_region(0,4))
-print(get_block_region(0,7))
-print(get_block_region(4,0))
-print(get_block_region(4,4))
-print(get_block_region(4,7))
-print(get_block_region(7,0))
-print(get_block_region(7,4))
-print(get_block_region(7,7))
 
-print(get_block_region(3,6))
-print(get_block_region(7,4))
+for x, row in enumerate(rows, 0):
+	print("Missing numbers in row {0}:".format(x), get_missing_numbers(row))
 
+for x, col in enumerate(cols, 0):
+	print("Missing numebrs in col {0}".format(x), get_missing_numbers(col))
