@@ -84,6 +84,11 @@ def get_missing_numbers_block(block, board):
 	return missing_numbers
 
 
+def get_numbers_in_row_or_column(row_or_column):
+	return [int(x) for x in row_or_column if x.isdigit()]
+
+
+
 
 board = create_board('sample.txt')
 print(board)
@@ -92,14 +97,20 @@ print(board)
 rows = [board[x] for x, row in enumerate(board, 0)]
 cols = [board[:, x] for x, col in enumerate(board, 0)]
 
+
+## tests
 for x, row in enumerate(rows, 0):
-	print("Missing numbers in row {0}:".format(x),
-		get_missing_numbers_row_index(row))
+	print("\nMissing numbers in row {0}:".format(x),
+		get_missing_numbers_row_column(row))
+	print("Present numbers in row {0}:".format(x),
+		get_numbers_in_row_or_column(row))
 
 for x, col in enumerate(cols, 0):
-	print("Missing numbers in col {0}".format(x),
-		get_missing_numbers_row_index(col))
+	print("\nMissing numbers in col {0}".format(x),
+		get_missing_numbers_row_column(col))
+	print("Present numbers in col {0}".format(x),
+		get_numbers_in_row_or_column(col))
 
-
-missing_nums = get_missing_numbers_block(5, board)
-print(missing_nums)
+for x in range(1, 9):
+	missing_nums = get_missing_numbers_block(x, board)
+	print("Missing numbers in block {0}: {1}".format(x, missing_nums))
