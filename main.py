@@ -38,6 +38,8 @@ def get_block_region(row_index, column_index):
 		elif column_index <= 8:
 			return 9
 
+# Gets the index rages for a given block
+# 	eg in block one, row and column indexes are [0,1,2]
 def get_block_indexes(block):
 	if block == 1:
 		return range(0,3), range(0,3)
@@ -65,11 +67,11 @@ def get_present_missing_numbers_row_column(row_or_column):
 
 	for num in RANGE:
 		if num not in [int(x) for x in row_or_column if x.isdigit()]:
-			missing_numbers.append(num)		
+			missing_numbers.append(num)
+
 	present_numbers = list(set(RANGE) - set(missing_numbers))
 	numbers["present"] = present_numbers
 	numbers["missing"] = missing_numbers
-
 	return numbers
 
 # returns a list of present and missing numbers in a given 3x3 block
@@ -92,6 +94,9 @@ def get_present_missing_numbers_in_block(block, board):
 	numbers["present"] = numbers_present
 	numbers["missing"] = missing_numbers
 	return numbers
+
+def check_number_not_in_row_and_column(num, proposed_loc):
+
 
 
 board = create_board('sample.txt')
