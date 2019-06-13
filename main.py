@@ -1,4 +1,7 @@
 import numpy as np
+import time
+
+start_time = time.time()
 
 RANGE = list(range(1,10))
 
@@ -158,8 +161,9 @@ def check_every_loc(board):
 	uniques = []
 	for x in range(0,9):
 		for y in range(0,9):
-			unique, num = check_if_unique_number_exists([x, y], board)
-			uniques.append(([x, y], unique, num))
+			if board[x][y] == ' ':
+				unique, num = check_if_unique_number_exists([x, y], board)
+				uniques.append(([x, y], unique, num))
 	return uniques
 
 
@@ -193,13 +197,15 @@ cols = [board[:, x] for x, col in enumerate(board, 0)]
 
 # print(check_number_present_in_adjacent_rows_columns(5, [1, 1], board))
 
-for i in range(0,100):
-
+while np.any(board == ' '):
 	uniques = check_every_loc(board)
 	for e in uniques:
 		if e[1] is True:
-			print(e)
+			# print(e)
 			loc = e[0]
-			board[loc[0], loc[1]] = int(e[2])
+			if board[loc[0], loc[1]] == ' ':
+				board[loc[0], loc[1]] = int(e[2])
 
-print(board)
+print("\n\n", board)
+
+print("--- %s seconds ---" % (time.time() - start_time))
