@@ -60,18 +60,24 @@ def get_block_indexes(block):
 	if block == 9:
 		return range(6,9), range(6,9)
 
-# returns a list of present missing numbers in a row/column
-def get_present_missing_numbers_row_column(row_or_column):
+# returns a list of present missing numbers in a row
+def get_present_missing_numbers_row(row, board):
 	missing_numbers = []
-	numbers = {}
+	present_numbers = [int(x) for x in board[row] if x.isdigit()]
+	missing_numbers = list(set(RANGE) - set(present_numbers))
 
-	for num in RANGE:
-		if num not in [int(x) for x in row_or_column if x.isdigit()]:
-			missing_numbers.append(num)
+	numbers = 	{"present": present_numbers,
+				"missing": missing_numbers}
+	return numbers
 
-	present_numbers = list(set(RANGE) - set(missing_numbers))
-	numbers["present"] = present_numbers
-	numbers["missing"] = missing_numbers
+# returns a list of present missing numbers in a column
+def get_present_missing_numbers_column(column, board):
+	missing_numbers = []
+	present_numbers = [int(x) for x in board[:, column] if x.isdigit()]
+	missing_numbers = list(set(RANGE) - set(present_numbers))
+
+	numbers = 	{"present": present_numbers,
+				"missing": missing_numbers}
 	return numbers
 
 # returns a list of present and missing numbers in a given 3x3 block
@@ -95,8 +101,13 @@ def get_present_missing_numbers_in_block(block, board):
 	numbers["missing"] = missing_numbers
 	return numbers
 
-def check_number_not_in_row_and_column(num, proposed_loc):
+def check_number_not_in_row_and_column(num, proposed_loc, board):
+	nums_in_row = get_present_missing_numbers_row(proposed_loc[0], board)["present"]
+	nums_in_col = get_present_missing_numbers_column(proposed_loc[1], board)["present"]
 
+	if num not in nums_in_row and num not in nums_in_col:
+		return True
+	return False
 
 
 board = create_board('sample.txt')
@@ -108,18 +119,21 @@ cols = [board[:, x] for x, col in enumerate(board, 0)]
 
 
 ## tests
-for x, row in enumerate(rows, 0):
-	print("\nMissing numbers in row {0}:".format(x),
-		get_present_missing_numbers_row_column(row)["missing"])
-	print("Present numbers in row {0}:".format(x),
-		get_present_missing_numbers_row_column(row)["present"])
+for row_num in range(0,9):
+	print("\nMissing numbers in row {0}:".format(row_num),
+		get_present_missing_numbers_row(row_num, board)["missing"])
+	print("Present numbers in row {0}:".format(row_num),
+		get_present_missing_numbers_row(row_num, board)["present"])
 
-for x, col in enumerate(cols, 0):
-	print("\nMissing numbers in col {0}".format(x),
-		get_present_missing_numbers_row_column(col)["missing"])
-	print("Present numbers in col {0}".format(x),
-		get_present_missing_numbers_row_column(col)["present"])
+for col_num in range(0,9):
+	print("\nMissing numbers in col {0}".format(col_num),
+		get_present_missing_numbers_column(col_num, board)["missing"])
+	print("Present numbers in col {0}".format(col_num),
+		get_present_missing_numbers_column(col_num, board)["present"])
 
 for x in range(1, 9):
 	missing_nums = get_present_missing_numbers_in_block(x, board)["missing"]
 	print("Missing numbers in block {0}: {1}".format(x, missing_nums))
+
+
+print(check_number_not_in_row_and_column(1, [1,1], board))
