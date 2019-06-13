@@ -153,7 +153,7 @@ def check_if_unique_number_exists(proposed_loc, board):
 	return unique, None
 
 
-
+# checks every location on board to see if a unique solutions exists
 def check_every_loc(board):
 	uniques = []
 	for x in range(0,9):
@@ -161,7 +161,6 @@ def check_every_loc(board):
 			unique, num = check_if_unique_number_exists([x, y], board)
 			uniques.append(([x, y], unique, num))
 	return uniques
-
 
 
 board = create_board('sample.txt')
@@ -173,29 +172,34 @@ cols = [board[:, x] for x, col in enumerate(board, 0)]
 
 
 ## tests
-for row_num in range(0,9):
-	print("\nMissing numbers in row {0}:".format(row_num),
-		get_present_missing_numbers_row(row_num, board)["missing"])
-	print("Present numbers in row {0}:".format(row_num),
-		get_present_missing_numbers_row(row_num, board)["present"])
+# for row_num in range(0,9):
+# 	print("\nMissing numbers in row {0}:".format(row_num),
+# 		get_present_missing_numbers_row(row_num, board)["missing"])
+# 	print("Present numbers in row {0}:".format(row_num),
+# 		get_present_missing_numbers_row(row_num, board)["present"])
 
-for col_num in range(0,9):
-	print("\nMissing numbers in col {0}".format(col_num),
-		get_present_missing_numbers_column(col_num, board)["missing"])
-	print("Present numbers in col {0}".format(col_num),
-		get_present_missing_numbers_column(col_num, board)["present"])
+# for col_num in range(0,9):
+# 	print("\nMissing numbers in col {0}".format(col_num),
+# 		get_present_missing_numbers_column(col_num, board)["missing"])
+# 	print("Present numbers in col {0}".format(col_num),
+# 		get_present_missing_numbers_column(col_num, board)["present"])
 
-for x in range(1, 9):
-	missing_nums = get_present_missing_numbers_in_block(x, board)["missing"]
-	print("Missing numbers in block {0}: {1}".format(x, missing_nums))
+# for x in range(1, 9):
+# 	missing_nums = get_present_missing_numbers_in_block(x, board)["missing"]
+# 	print("Missing numbers in block {0}: {1}".format(x, missing_nums))
 
 
-print(check_number_not_in_row_and_column_and_block(1, [1,1], board))
+# print(check_number_not_in_row_and_column_and_block(1, [1,1], board))
 
-print(check_number_present_in_adjacent_rows_columns(5, [1, 1], board))
+# print(check_number_present_in_adjacent_rows_columns(5, [1, 1], board))
 
-uniques = check_every_loc(board)
-for e in uniques:
-	if e[1] is True:
-		print(e)
-# print(check_every_loc(board))
+for i in range(0,100):
+
+	uniques = check_every_loc(board)
+	for e in uniques:
+		if e[1] is True:
+			print(e)
+			loc = e[0]
+			board[loc[0], loc[1]] = int(e[2])
+
+print(board)
