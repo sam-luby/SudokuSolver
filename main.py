@@ -140,20 +140,27 @@ def check_number_present_in_adjacent_rows_columns(num, proposed_loc, board):
 def check_if_unique_number_exists(proposed_loc, board):
 	valids = {}
 
-	# for every location on board, check if theres is only one valid number for that location
+	# check if theres is only one valid number for location
 	for x in range(1, 10):
 		valids.update({"{0}".format(x): check_number_not_in_row_and_column_and_block(x, proposed_loc, board)})
 
 	# only unique if it is the only valid number that can go in the location
 	unique = (True if sum(value is True for value in valids.values()) is 1 else False)
-	return unique
+	if unique:
+		for num, valid in valids.items():
+			if valid is True:
+				return unique, num
+	return unique, None
 
 
 
 def check_every_loc(board):
+	uniques = []
 	for x in range(0,9):
 		for y in range(0,9):
-			print(check_if_unique_number_exists([x, y], board))
+			unique, num = check_if_unique_number_exists([x, y], board)
+			uniques.append(([x, y], unique, num))
+	return uniques
 
 
 
@@ -187,4 +194,8 @@ print(check_number_not_in_row_and_column_and_block(1, [1,1], board))
 
 print(check_number_present_in_adjacent_rows_columns(5, [1, 1], board))
 
-check_every_loc(board)
+uniques = check_every_loc(board)
+for e in uniques:
+	if e[1] is True:
+		print(e)
+# print(check_every_loc(board))
