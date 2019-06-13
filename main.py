@@ -76,8 +76,8 @@ def get_present_missing_numbers_column(column, board):
 	present_numbers = [int(x) for x in board[:, column] if x.isdigit()]
 	missing_numbers = list(set(RANGE) - set(present_numbers))
 
-	numbers = 	{"present": present_numbers,
-				"missing": missing_numbers}
+	numbers = {"present": present_numbers,
+			"missing": missing_numbers}
 	return numbers
 
 # returns a list of present and missing numbers in a given 3x3 block
@@ -97,10 +97,12 @@ def get_present_missing_numbers_in_block(block, board):
 		if num not in [int(x) for x in numbers_present if x.isdigit()]:
 			missing_numbers.append(num)
 
-	numbers["present"] = numbers_present
-	numbers["missing"] = missing_numbers
+	numbers = {"present": numbers_present,
+			"missing": missing_numbers}
 	return numbers
 
+# checks if a given number in a proposed location clashes horizontally/vertically (row/column) 
+#	with an already present number
 def check_number_not_in_row_and_column(num, proposed_loc, board):
 	nums_in_row = get_present_missing_numbers_row(proposed_loc[0], board)["present"]
 	nums_in_col = get_present_missing_numbers_column(proposed_loc[1], board)["present"]
@@ -108,6 +110,48 @@ def check_number_not_in_row_and_column(num, proposed_loc, board):
 	if num not in nums_in_row and num not in nums_in_col:
 		return True
 	return False
+
+
+# checks if, for a given number and location, the number is in the other two 
+#	rows/columns in the adjacent blocks
+def check_number_present_in_adjacent_rows_columns(num, proposed_loc, board):
+
+	# get block number
+	block_num = get_block_region(proposed_loc[0], proposed_loc[1])
+
+	# get block indexes
+	row_indexes, col_indexes = get_block_indexes(block_num)
+	present = {}
+
+	
+	for index in [index for index in row_indexes if index is not proposed_loc[0]]:
+		present_nums = get_present_missing_numbers_row(index, board)["present"]
+		present.update({"row{0}".format(index): True if num in present_nums else False})
+
+	for index in [index for index in col_indexes if index is not proposed_loc[1]]:
+		present_nums = get_present_missing_numbers_column(index, board)["present"]
+		present.update({"col{0}".format(index): True if num in present_nums else False})
+
+	print(present)
+	# check if the proposed number is in the other 2 rows/columns for adjacent blocks
+
+
+	
+# checks if a given number in a proposed location is the ONLY valid choice (using all other functions)
+# def check_if_only_valid_number(num, proposed_loc, board):
+# 	# get block num
+# 	block_num = get_block_region(proposed_loc[0], proposed_loc[1])
+	
+# 	# check num not in block
+# 	if num not in get_present_missing_numbers_in_block(block_num, board)["present"]:
+# 		if check_number_not_in_row_and_column(num, proposed_loc, board):
+# 			pass
+# 		else
+# 			print("{0} in row/col".format(num))
+# 	else
+# 		print("{0} in block {1}".format(num, block_num))	
+
+
 
 
 board = create_board('sample.txt')
@@ -137,3 +181,5 @@ for x in range(1, 9):
 
 
 print(check_number_not_in_row_and_column(1, [1,1], board))
+
+check_number_present_in_adjacent_rows_columns(5, [1, 1], board)
