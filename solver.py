@@ -10,20 +10,19 @@ def create_board(filename):
 	f = open(filename, 'r')
 	lines = f.readlines()
 	lines = [line.replace('x', ' ').replace(',', '').strip('\n') for line in lines]
-	# lines_fmtd = ['|'.join([line[i:i+3] for i in range(0, len(line), 3)]) for line in lines]
 	board = np.array([list(line) for line in lines])
 	return board
 
 def print_board(board):
-	for x, row in enumerate(board, 0):
-		if x%3==0:
+	for x, line in enumerate(board, 0):
+		if x%3 == 0 and x > 0:
 			print('-----   -----   -----')
-		print(print_line(row))
+		print_line(line)
+	print('\n')
 
-def print_line(row):
-	line = "{0} | {1} | {2}".format(' '.join(row[0:3]), ' '.join(row[3:6]), ' '.join(row[6:9]))
-	return line
-
+def print_line(line):
+	line = "{0} | {1} | {2}".format(' '.join(line[0:3]), ' '.join(line[3:6]), ' '.join(line[6:9]))
+	print(line)
 
 # Gets the 3x3 block on the sudoku board
 #   1[0:2][0:2] | 2[0:2][3:5] | 3[0:2][6:8]
@@ -178,11 +177,16 @@ def check_every_loc(board):
 	return uniques
 
 
-board = create_board('sample.txt')
-print(board)
+board = create_board('medium.txt')
+print_board(board)
 
-
+i = 0
 while np.any(board == ' '):
+	i+=1
+	if i%100 == 0:
+		print("{0} iterations".format(i))
+	if i%1000 == 0:
+		print_board(board)
 	uniques = check_every_loc(board)
 	for unique in uniques:
 		if unique[1] is True:
@@ -191,8 +195,6 @@ while np.any(board == ' '):
 			if board[loc[0], loc[1]] == ' ':
 				board[loc[0], loc[1]] = int(unique[2])
 
-print("\n\n", board)
+print_board(board)
 
 print("--- %s seconds ---" % (time.time() - start_time))
-
-print_board(board)
