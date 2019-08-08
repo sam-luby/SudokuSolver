@@ -177,7 +177,7 @@ def check_every_loc(board):
 	return uniques
 
 
-board = create_board('medium.txt')
+board = create_board('samples/sample.txt')
 print_board(board)
 
 i = 0
